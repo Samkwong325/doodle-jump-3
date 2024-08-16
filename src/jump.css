@@ -1,0 +1,13 @@
+.doodle-jump {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0; /* Light gray background for the whole game */
+  min-height: 100vh; /* Ensure the game takes up full viewport height */
+}
+
+.doodle-jump canvas {
+  border: 2px solid #ccc; /* Light gray border */
+}
