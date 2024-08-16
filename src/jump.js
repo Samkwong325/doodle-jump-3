@@ -14,6 +14,7 @@ window.initGame = (React, assetsUrl) => {
     const [platforms, setPlatforms] = useState([]);
     const [doodleImage, setDoodleImage] = useState(null);
     const [platformImage, setPlatformImage] = useState(null);
+    const [gameOver, setGameOver] = useState(false); // Track game over state
 
     useEffect(() => {
       const canvas = canvasRef.current;
@@ -29,12 +30,12 @@ window.initGame = (React, assetsUrl) => {
 
       // Load doodle image
       const doodleImg = new Image();
-      doodleImg.src = `${assetsUrl}/doodle.png`; // Replace 'doodle.png' with your image file name
+      doodleImg.src = `${assetsUrl}/doodle.png`; 
       doodleImg.onload = () => setDoodleImage(doodleImg);
 
       // Load platform image
       const platformImg = new Image();
-      platformImg.src = `${assetsUrl}/platform.png`; // Replace 'platform.png' with your image file name
+      platformImg.src = `${assetsUrl}/platform.png`; 
       platformImg.onload = () => setPlatformImage(platformImg);
 
       // Game loop
@@ -53,7 +54,7 @@ window.initGame = (React, assetsUrl) => {
             doodle.y + doodle.radius > platform.y &&
             doodle.y - doodle.radius < platform.y + platform.height
           ) {
-            doodle.velocityY = -10; // Bounce off platform
+            doodle.velocityY = -10; 
             setScore(score + 1);
             return true;
           }
@@ -62,8 +63,7 @@ window.initGame = (React, assetsUrl) => {
 
         // Game over if doodle falls below the canvas
         if (doodle.y > canvas.height) {
-          alert(`Game Over! Your score: ${score}`);
-          resetGame();
+          setGameOver(true); // Set game over state
         }
 
         // Draw doodle (using loaded image)
@@ -119,6 +119,7 @@ window.initGame = (React, assetsUrl) => {
         { x: 350, y: 300, width: 100, height: 20 },
       ];
       setPlatforms(initPlatforms);
+      setGameOver(false); // Reset game over state
     };
 
     return React.createElement(
@@ -126,7 +127,15 @@ window.initGame = (React, assetsUrl) => {
       { className: 'doodle-jump' },
       React.createElement('h2', null, 'Doodle Jump'),
       React.createElement('canvas', { ref: canvasRef, width: 400, height: 600 }),
-      React.createElement('p', null, `Score: ${score}`)
+      React.createElement('p', null, `Score: ${score}`),
+      gameOver && ( // Show game over window only if gameOver is true
+        React.createElement(
+          'div',
+          { className: 'game-over' },
+          React.createElement('p', null, `Game Over! Your score: ${score}`),
+          React.createElement('button', { onClick: resetGame }, 'Play Again') // Restart button
+        )
+      )
     );
   };
 
